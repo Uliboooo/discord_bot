@@ -1,0 +1,18 @@
+{
+  "name": "linux_club_bot",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "wrangler": "^4.87.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "discord-interactions": "^4.4.0",
+    "hono": "^4.12.16",
+    "tweetnacl": "^1.0.3"
+  }
+}
