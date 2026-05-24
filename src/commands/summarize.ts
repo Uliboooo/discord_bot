@@ -210,7 +210,7 @@ export async function execute(interaction: any, env: Env, ctx: ExecutionContext)
       } catch (error) {
         console.error("Error in background summarization:", error);
         // エラー内容をユーザーに通知（任意）
-        await fetch(`https://discord.com/api/v10/webhooks/${appId}/${token}/messages/@original`, {
+        await fetch(webhookUrl, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ content: `エラーが発生しました: ${error}` }),
