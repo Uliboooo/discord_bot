@@ -2,15 +2,19 @@ name = "linux-club-bot"
 main = "src/index.ts"
 compatibility_date = "2026-05-01"
 
+# 共通設定（ローカル開発用など）
 [vars]
 DISCORD_PUBLIC_KEY = "619a8864c9ec2db6e8944f07897c7ed5dc432f4d49319a66a9e65d13f72f963f"
-DISCORD_APPLICATION_ID = "1499970151326683228"
+DISCORD_APPLICATION_ID = "YOUR_PRODUCTION_APP_ID"
 
 [env.production]
 name = "linux-club-bot"
+[env.production.vars]
+DISCORD_PUBLIC_KEY = "619a8864c9ec2db6e8944f07897c7ed5dc432f4d49319a66a9e65d13f72f963f"
+DISCORD_APPLICATION_ID = "1499970151326683228"
 
 [env.staging]
 name = "linux-club-bot-staging"
 [env.staging.vars]
-DISCORD_PUBLIC_KEY = "d93ef09f30e7396987c1435fb7d6fbbe40afbc8c0ee4e7fbf6093ffcd1a4c189"
+DISCORD_PUBLIC_KEY = "619a8864c9ec2db6e8944f07897c7ed5dc432f4d49319a66a9e65d13f72f963f"
 DISCORD_APPLICATION_ID = "1507963838539235398"
