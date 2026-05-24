@@ -118,7 +118,7 @@ async function fetchChannelMessages(
       content: msg.content,
       attachments: msg.attachments.map((a) => a.url),
     }))
-    .filter((m) => allow_users.includes(m.senderId));
+    .filter((m) => allow_users.includes(m.senderId) || allow_users.includes(m.senderName));
 }
 
 async function summarize(message: string, env: Env) {
