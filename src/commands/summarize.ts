@@ -167,20 +167,35 @@ export async function execute(interaction: any, env: Env, ctx: ExecutionContext)
         });
         console.log(`Fetched ${history.length} messages.`);
 
+        if (history.length === 0) {
+          console.log("No messages to summarize. Skipping AI call.");
+          await fetch(webhookUrl, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: "指定された期間内に要約対象のメッセージが見つかりませんでした。(allow_list を確認してください)" }),
+          });
+          return;
+        }
+
         const formatted =
           history
             .map(
               (m) =>
                 `[${m.timestamp.toLocaleString("ja-JP")}] ${m.senderName}: ${m.content}`,
             )
-            .join("\n") || "メッセージが見つかりませんでした";
+            .join("\n");
 
         console.log("Calling Gemini API...");
-        const sum = await summarize(formatted, env);
+        let sum = await summarize(formatted, env);
         console.log("Summarization complete.");
 
+        // Discord's 2000 character limit
+        if (sum.length > 2000) {
+          console.log("Response too long, truncating...");
+          sum = sum.substring(0, 1990) + "...(truncated)";
+        }
+
         console.log("Sending response back to Discord via webhook...");
-        const webhookUrl = `https://discord.com/api/v10/webhooks/${appId}/${token}/messages/@original`;
         const res = await fetch(webhookUrl, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

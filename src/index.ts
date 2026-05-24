@@ -52,6 +52,8 @@ const handleInteractions = async (c: any) => {
   }
 
   console.log(`Interaction type: ${interaction.type}`);
+  const user = interaction.member?.user || interaction.user;
+  console.log(`User: ${user?.username} (ID: ${user?.id})`);
 
   if (interaction.type === InteractionType.PING) {
     console.log("Handling PING");
