@@ -9,7 +9,9 @@ const token = process.env.DISCORD_TOKEN;
 const applicationId = process.env.DISCORD_APPLICATION_ID;
 
 if (!token || !applicationId) {
-  console.error("Error: DISCORD_TOKEN or DISCORD_APPLICATION_ID is not defined.");
+  console.error(
+    "Error: DISCORD_TOKEN or DISCORD_APPLICATION_ID is not defined.",
+  );
   process.exit(1);
 }
 

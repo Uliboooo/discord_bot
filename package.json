@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "register": "bun src/register.ts"
+    "register": "bun src/register.ts",
+    "deploy": "wrangler deploy"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240405.0",
@@ -15,6 +16,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@google/genai": "^2.6.0",
     "discord-interactions": "^4.4.0",
     "hono": "^4.12.16",
     "tweetnacl": "^1.0.3"

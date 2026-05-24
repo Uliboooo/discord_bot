@@ -5,3 +5,9 @@ compatibility_date = "2026-05-01"
 [vars]
 DISCORD_PUBLIC_KEY = "619a8864c9ec2db6e8944f07897c7ed5dc432f4d49319a66a9e65d13f72f963f"
 
+[env.production]
+name = "linux-club-bot"
+
+[env.staging]
+name = "linux-club-bot-staging"
+

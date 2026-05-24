@@ -1,15 +1,5 @@
-# linux_club_bot
+# Features
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.3.13. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+- `/ping`: response 'pong!'
+- `/shi [message]`: response message formatted as totuzennosi
+- `/summarize`: response summary about messages between user specifier
