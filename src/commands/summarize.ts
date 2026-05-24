@@ -157,7 +157,7 @@ export async function execute(interaction: any, env: Env, ctx: ExecutionContext)
   const appId = env.DISCORD_APPLICATION_ID;
   const token = interaction.token;
 
-  env.ctx.waitUntil(
+  ctx.waitUntil(
     (async () => {
       console.log("Starting background summarization...");
       try {

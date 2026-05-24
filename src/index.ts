@@ -66,7 +66,7 @@ const handleInteractions = async (c: any) => {
     if (command) {
       console.log(`Command found: ${name}. Executing...`);
       try {
-        const response = command.execute(interaction, c.env, c.executionCtx);
+        const response = await command.execute(interaction, c.env, c.executionCtx);
         console.log(`Command ${name} executed successfully.`);
         return c.json(response);
       } catch (error) {
