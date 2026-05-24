@@ -136,7 +136,7 @@ async function summarize(message: string, env: Env) {
   return response.candidates?.[0]?.content?.parts?.[0]?.text || "";
 }
 
-export async function execute(interaction: any, env: Env) {
+export async function execute(interaction: any, env: Env, ctx: ExecutionContext) {
   const options = interaction.data.options;
   const input_range = options?.find((opt: any) => opt.name === "range");
   const get_range = input_range ? input_range.value : null;
@@ -154,10 +154,10 @@ export async function execute(interaction: any, env: Env) {
     data: {},
   };
 
-  const appId = env.DISCORD_APP_ID;
+  const appId = env.DISCORD_APPLICATION_ID;
   const token = interaction.token;
 
-  env.ctx.waitUntil(
+  ctx.waitUntil(
     (async () => {
       const history = await fetchChannelMessages(c_id, env, {
         after: after_date,

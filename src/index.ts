@@ -56,7 +56,7 @@ const handleInteractions = async (c: any) => {
     const command = commands.find((cmd) => cmd.data.name === name);
 
     if (command) {
-      return c.json(command.execute(interaction));
+      return c.json(command.execute(interaction, c.env, c.executionCtx));
     }
   }
 
