@@ -1,15 +1,15 @@
-# linux_club_bot
+# Features
 
-To install dependencies:
+- `/ping`: response 'pong!'
+- `/shi [message]`: response message formatted as totuzennosi
+- `/summarize`: response summary about messages between user specifier
 
-```bash
-bun install
-```
+## link
 
-To run:
+dev-version
 
-```bash
-bun run index.ts
-```
+https://discord.com/oauth2/authorize?client_id=1507963838539235398&permissions=274877974528&integration_type=0&scope=bot
 
-This project was created using `bun init` in bun v1.3.13. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+main
+
+https://discord.com/oauth2/authorize?client_id=1499970151326683228&permissions=309237712896&integration_type=0&scope=bot
