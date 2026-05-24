@@ -157,31 +157,50 @@ export async function execute(interaction: any, env: Env, ctx: ExecutionContext)
   const appId = env.DISCORD_APPLICATION_ID;
   const token = interaction.token;
 
-  ctx.waitUntil(
+  env.ctx.waitUntil(
     (async () => {
-      const history = await fetchChannelMessages(c_id, env, {
-        after: after_date,
-        limit: 100,
-      });
+      console.log("Starting background summarization...");
+      try {
+        const history = await fetchChannelMessages(c_id, env, {
+          after: after_date,
+          limit: 100,
+        });
+        console.log(`Fetched ${history.length} messages.`);
 
-      const formatted =
-        history
-          .map(
-            (m) =>
-              `[${m.timestamp.toLocaleString("ja-JP")}] ${m.senderName}: ${m.content}`,
-          )
-          .join("\n") || "メッセージが見つかりませんでした";
+        const formatted =
+          history
+            .map(
+              (m) =>
+                `[${m.timestamp.toLocaleString("ja-JP")}] ${m.senderName}: ${m.content}`,
+            )
+            .join("\n") || "メッセージが見つかりませんでした";
 
-      const sum = await summarize(formatted, env);
+        console.log("Calling Gemini API...");
+        const sum = await summarize(formatted, env);
+        console.log("Summarization complete.");
 
-      await fetch(
-        `https://discord.com/api/v10/webhooks/${appId}/${token}/messages/@original`,
-        {
+        console.log("Sending response back to Discord via webhook...");
+        const webhookUrl = `https://discord.com/api/v10/webhooks/${appId}/${token}/messages/@original`;
+        const res = await fetch(webhookUrl, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ content: sum }),
-        },
-      );
+        });
+
+        if (!res.ok) {
+          console.error(`Failed to send webhook: ${res.status} ${await res.text()}`);
+        } else {
+          console.log("Successfully sent response to Discord.");
+        }
+      } catch (error) {
+        console.error("Error in background summarization:", error);
+        // エラー内容をユーザーに通知（任意）
+        await fetch(`https://discord.com/api/v10/webhooks/${appId}/${token}/messages/@original`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: `エラーが発生しました: ${error}` }),
+        });
+      }
     })(),
   );
 
