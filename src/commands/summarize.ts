@@ -123,7 +123,7 @@ async function fetchChannelMessages(
 
 async function summarize(message: string, env: Env) {
   const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
-  const systemPrompt = prompt[0]?.prompt || "Summarize this message history:";
+  const systemPrompt = prompt.find(p => p.name === "mero-senpai")?.prompt || "Summarize this message history:";
   const fullPrompt = `${systemPrompt}\n\n${message}`;
 
   const response = await client.models.generateContent({
