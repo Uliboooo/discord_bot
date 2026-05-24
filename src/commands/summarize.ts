@@ -9,10 +9,10 @@ export const data = {
   options: [
     {
       name: "range",
-      description: "reply summary of your selected messages history",
+      description: "summary range",
       type: 3, // STRING
       required: false,
-      choises: [
+      choices: [
         { name: "last 30min", value: "0.5h" },
         { name: "last hour", value: "1h" },
         { name: "last 2 hours", value: "2h" },
@@ -24,7 +24,7 @@ export const data = {
   ],
 };
 
-const rangeMap = {
+const rangeMap: Record<string, number> = {
   "0.5h": 30,
   "1h": 60,
   "2h": 120,
@@ -39,10 +39,8 @@ const DISCORD_EPOCH = 1420070400000n;
 
 interface Env {
   DISCORD_BOT_TOKEN: string;
-  DISCORD_APP_ID: string;
+  DISCORD_APPLICATION_ID: string;
   GEMINI_API_KEY: string;
-  CHANNEL_ID: string;
-  ctx: ExecutionContext;
 }
 
 interface DiscordAttachment {
@@ -143,19 +141,15 @@ export async function execute(interaction: any, env: Env, ctx: ExecutionContext)
 
   const minutes =
     get_range !== null && get_range in rangeMap
-      ? rangeMap[get_range as keyof typeof rangeMap]
+      ? rangeMap[get_range as keyof typeof rangeMap]!
       : 60;
 
   const c_id = interaction.channel_id;
   const after_date = new Date(Date.now() - minutes * 60000);
 
-  const deferResponse = {
-    type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {},
-  };
-
   const appId = env.DISCORD_APPLICATION_ID;
   const token = interaction.token;
+  const webhookUrl = `https://discord.com/api/v10/webhooks/${appId}/${token}/messages/@original`;
 
   ctx.waitUntil(
     (async () => {
@@ -189,7 +183,6 @@ export async function execute(interaction: any, env: Env, ctx: ExecutionContext)
         let sum = await summarize(formatted, env);
         console.log("Summarization complete.");
 
-        // Discord's 2000 character limit
         if (sum.length > 2000) {
           console.log("Response too long, truncating...");
           sum = sum.substring(0, 1990) + "...(truncated)";
@@ -209,7 +202,6 @@ export async function execute(interaction: any, env: Env, ctx: ExecutionContext)
         }
       } catch (error) {
         console.error("Error in background summarization:", error);
-        // エラー内容をユーザーに通知（任意）
         await fetch(webhookUrl, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -219,5 +211,8 @@ export async function execute(interaction: any, env: Env, ctx: ExecutionContext)
     })(),
   );
 
-  return deferResponse;
+  return {
+    type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {},
+  };
 }
